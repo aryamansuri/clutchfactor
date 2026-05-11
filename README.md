@@ -132,7 +132,7 @@ React Frontend
 
 ### Home Dashboard
 
-![Home Dashboard](./screenshots/HomePage.png)
+![Home Dashboard](./screenshots/Homepage.png)
 
 ### Live Game View
 
