@@ -2,7 +2,7 @@ import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
 
 const socket = new SockJS(
-  "http://localhost:8080/ws"
+  "`${import.meta.env.VITE_API_URL}/ws"
 );
 
 export const stompClient = new Client({
