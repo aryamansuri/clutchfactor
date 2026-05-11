@@ -6,6 +6,7 @@ import com.clutchfactor.backend.repository.ProbabilitySnapshotRepository;
 import com.clutchfactor.backend.service.GameStateService;
 
 import com.clutchfactor.backend.service.RealGameStateService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.clutchfactor.backend.service.NbaApiService;
@@ -50,9 +51,18 @@ public class GameController {
     }
 
     @GetMapping("/{id}")
-    public Map<String, Object> getGameById(@PathVariable int id) {
+    public ResponseEntity<GameDto> getGameById(
+        @PathVariable Long id
+    ) {
 
-        return gameStateService.getGameById(id);
+        List<GameDto> games =
+            realGameStateService.getLiveGames();
+
+        return games.stream()
+            .filter(game -> game.id == id)
+            .findFirst()
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/{id}/history")
