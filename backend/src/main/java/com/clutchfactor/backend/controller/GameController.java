@@ -52,7 +52,7 @@ public class GameController {
 
     @GetMapping("/{id}")
     public ResponseEntity<GameDto> getGameById(
-        @PathVariable Long id
+        @PathVariable int id
     ) {
 
         List<GameDto> games =
