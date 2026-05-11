@@ -1,3 +1,5 @@
+import {games} from "../../mock/games.ts";
+
 export default function Navbar() {
   return (
     <div className="w-full border-b border-white/10 bg-black/30 backdrop-blur-md">
@@ -14,7 +16,7 @@ export default function Navbar() {
 
         <div className="flex items-center gap-2 text-sm text-gray-300">
           <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-          4 games live
+          {games.length} games live
         </div>
       </div>
     </div>
