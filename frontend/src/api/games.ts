@@ -1,7 +1,7 @@
 export async function fetchLiveGames() {
 
   const response = await fetch(
-    "${import.meta.env.VITE_API_URL}/api/games/live"
+    `${import.meta.env.VITE_API_URL}/api/games/live`
   );
 
   if (!response.ok) {
@@ -29,7 +29,7 @@ export async function fetchGameById(
 export async function fetchRealGames() {
 
   const response = await fetch(
-    "${import.meta.env.VITE_API_URL}/api/games/real"
+    `${import.meta.env.VITE_API_URL}/api/games/real`
   );
 
   if (!response.ok) {
