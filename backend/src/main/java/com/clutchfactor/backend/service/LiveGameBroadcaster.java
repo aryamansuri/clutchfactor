@@ -40,7 +40,7 @@ public class LiveGameBroadcaster {
         this.repository = repository;
     }
 
-    @Scheduled(fixedRate = 15000)
+    @Scheduled(fixedRate = 30000)
     public void broadcastGames() {
 
         List<GameDto> games =

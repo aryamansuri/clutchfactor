@@ -217,7 +217,7 @@ export default function GamePage() {
   return (
     <div className="min-h-screen">
 
-      <Navbar />
+      <Navbar liveGameCount={1} />
 
       <div className="max-w-7xl mx-auto px-6 py-10">
 

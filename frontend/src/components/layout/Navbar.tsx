@@ -1,6 +1,10 @@
-import {games} from "../../mock/games.ts";
+type NavbarProps = {
+  liveGameCount: number;
+};
 
-export default function Navbar() {
+export default function Navbar({
+  liveGameCount,
+}: NavbarProps) {
   return (
     <div className="w-full border-b border-white/10 bg-black/30 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -16,7 +20,7 @@ export default function Navbar() {
 
         <div className="flex items-center gap-2 text-sm text-gray-300">
           <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-          {games.length} games live
+          {liveGameCount} games live
         </div>
       </div>
     </div>

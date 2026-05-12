@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -29,32 +30,34 @@ public class NbaApiService {
 
     public List<GameDto> fetchLiveGames() {
 
-        String url =
-            "https://api.balldontlie.io/v1/games?dates[]=2026-05-10";
+        try {
 
-        HttpHeaders headers =
-            new HttpHeaders();
+            String today =
+                java.time.LocalDate.now(
+                    java.time.ZoneId.of("America/New_York")
+                ).toString();
 
-        headers.set(
-            "Authorization",
-            apiKey
-        );
+            String url =
+                "https://api.balldontlie.io/v1/games?dates[]=" + today;
 
-        HttpEntity<String> entity =
-            new HttpEntity<>(headers);
+            HttpHeaders headers =
+                new HttpHeaders();
 
-        ResponseEntity<String> response =
-            restTemplate.exchange(
-                url,
-                HttpMethod.GET,
-                entity,
-                String.class
+            headers.set(
+                "Authorization",
+                apiKey
             );
 
-        List<GameDto> games =
-            new ArrayList<>();
+            HttpEntity<String> entity =
+                new HttpEntity<>(headers);
 
-        try {
+            ResponseEntity<String> response =
+                restTemplate.exchange(
+                    url,
+                    HttpMethod.GET,
+                    entity,
+                    String.class
+                );
 
             ObjectMapper mapper =
                 new ObjectMapper();
@@ -67,7 +70,24 @@ public class NbaApiService {
             JsonNode data =
                 root.get("data");
 
+            List<GameDto> games =
+                new ArrayList<>();
+
             for (JsonNode game : data) {
+
+                int period =
+                    game.get("period").asInt();
+
+                String status =
+                    game.get("status").asText();
+
+                // Skip games that haven't started yet
+                if (
+                    period == 0 &&
+                    !status.equals("Final")
+                ) {
+                    continue;
+                }
 
                 int homeScore =
                     game.get("home_team_score")
@@ -80,14 +100,21 @@ public class NbaApiService {
                 int scoreDiff =
                     homeScore - awayScore;
 
-                int period =
-                    game.get("period").asInt();
-
                 int probability =
                     calculateProbability(
                         scoreDiff,
                         period
                     );
+
+                String quarter =
+                    status.equals("Final")
+                        ? "Final"
+                        : "Q" + period;
+
+                String gameTime =
+                    game.get("time").isNull()
+                        ? ""
+                        : game.get("time").asText();
 
                 GameDto dto =
                     new GameDto(
@@ -108,10 +135,9 @@ public class NbaApiService {
 
                         probability,
 
-                        "Q" + period,
+                        quarter,
 
-                        game.get("time")
-                            .asText(),
+                        gameTime,
 
                         period
                     );
@@ -119,12 +145,13 @@ public class NbaApiService {
                 games.add(dto);
             }
 
+            return games;
+
         } catch (Exception e) {
 
-            e.printStackTrace();
+            System.out.println("Using cached NBA data (API rate limited).");
+            return Collections.emptyList();
         }
-
-        return games;
     }
 
     private int calculateProbability(

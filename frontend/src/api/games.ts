@@ -1,16 +1,3 @@
-export async function fetchLiveGames() {
-
-  const response = await fetch(
-    `${import.meta.env.VITE_API_URL}/api/games/live`
-  );
-
-  if (!response.ok) {
-    throw new Error("Failed to fetch games");
-  }
-
-  return response.json();
-}
-
 export async function fetchGameById(
   id: string
 ) {

@@ -59,7 +59,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen">
 
-      <Navbar />
+      <Navbar liveGameCount={games.length} />
 
       <LiveTicker games={games} />
 

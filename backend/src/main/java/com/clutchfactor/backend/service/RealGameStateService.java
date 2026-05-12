@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Random;
+import java.util.Optional;
 
 @Service
 public class RealGameStateService {
@@ -33,35 +34,24 @@ public class RealGameStateService {
             List<GameDto> games =
                 nbaApiService.fetchLiveGames();
 
-            cachedGames = games;
-
-            for (GameDto game : games) {
-
-                int swing =
-                    random.nextInt(11) - 5;
-
-                int updatedProbability =
-                    Math.max(
-                        1,
-                        Math.min(
-                            99,
-                            game.probability + swing
-                        )
-                    );
-
-                game.probability =
-                    updatedProbability;
+            if (games != null) {
+                cachedGames = games;
             }
-
-            return games;
 
         } catch (Exception e) {
 
             System.out.println(
-                "Failed to fetch live NBA data."
+                "Using cached NBA data."
             );
 
-            return cachedGames;
         }
+
+        return cachedGames;
+    }
+
+    public Optional<GameDto> getGameById(int id) {
+        return cachedGames.stream()
+            .filter(game -> game.id == id)
+            .findFirst();
     }
 }
