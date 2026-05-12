@@ -14,6 +14,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 
 import java.util.Collections;
@@ -32,13 +34,18 @@ public class NbaApiService {
 
         try {
 
-            String today =
-                java.time.LocalDate.now(
-                    java.time.ZoneId.of("America/New_York")
-                ).toString();
+            LocalDate today =
+                LocalDate.now(
+                    ZoneId.of("America/New_York")
+                );
+
+            LocalDate yesterday =
+                today.minusDays(1);
 
             String url =
-                "https://api.balldontlie.io/v1/games?dates[]=" + today;
+                "https://api.balldontlie.io/nba/v1/games"
+                + "?dates[]=" + today
+                + "&dates[]=" + yesterday;
 
             HttpHeaders headers =
                 new HttpHeaders();
@@ -139,7 +146,7 @@ public class NbaApiService {
 
                         gameTime,
 
-                        period
+                        period, game.get("status").asText()
                     );
 
                 games.add(dto);

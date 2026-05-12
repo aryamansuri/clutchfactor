@@ -20,6 +20,8 @@ public class GameDto {
 
     public int period;
 
+    private String status;
+
     public GameDto(
         int id,
         String homeTeam,
@@ -29,7 +31,8 @@ public class GameDto {
         int probability,
         String quarter,
         String time,
-        int period
+        int period,
+        String status
     ) {
 
         this.id = id;
@@ -49,5 +52,7 @@ public class GameDto {
         this.time = time;
 
         this.period = period;
+
+        this.status = status;
     }
 }

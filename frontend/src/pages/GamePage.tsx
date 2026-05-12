@@ -4,8 +4,13 @@ import {
 } from "react";
 
 import {
-  useParams
+  useParams,
+  useLocation
 } from "react-router-dom";
+
+import {
+  getGameAnalytics
+} from "../utils/gameAnalytics";
 
 import Navbar from "../components/layout/Navbar";
 
@@ -40,9 +45,15 @@ import type {
 export default function GamePage() {
 
   const { id } = useParams();
+  const location = useLocation();
+
+  const initialGame =
+    location.state?.game as Game | undefined;
 
   const [game, setGame] =
-    useState<Game | null>(null);
+    useState<Game | null>(
+      initialGame || null
+    );
 
   const [momentumData, setMomentumData] =
     useState<ProbabilitySnapshot[]>([]);
@@ -115,10 +126,12 @@ export default function GamePage() {
 
       if (!id) return;
 
-      const data =
-        await fetchGameById(id);
+      if (!initialGame) {
+        const data =
+          await fetchGameById(id);
 
-      setGame(data);
+        setGame(data);
+      }
 
       const history =
         await fetchGameHistory(id);
@@ -213,6 +226,12 @@ export default function GamePage() {
 
   const awayTheme =
     teamThemes[game.awayTeam];
+
+  const analytics =
+    getGameAnalytics(game);
+
+  const isFinal =
+    game.status === "Final";
 
   return (
     <div className="min-h-screen">
@@ -330,13 +349,59 @@ export default function GamePage() {
             <div className="panel rounded-3xl p-6 flex flex-col items-center justify-center">
 
               <WinProbabilityRing
-                probability={game.probability}
-                color={homeTheme.secondary}
+                  probability={game.probability}
+                  color={homeTheme.secondary}
               />
+
+              <div className="mt-8 grid grid-cols-2 gap-4 w-full">
+
+                <div className="panel rounded-2xl p-4">
+                  <div className="text-xs text-gray-400">
+                    PROJECTED FINAL
+                  </div>
+
+                  <div className="text-lg font-bold mt-1">
+                    {analytics.projectedHome}
+                    {" - "}
+                    {analytics.projectedAway}
+                  </div>
+                </div>
+
+                <div className="panel rounded-2xl p-4">
+                  <div className="text-xs text-gray-400">
+                    CLUTCH RATING
+                  </div>
+
+                  <div className="text-lg font-bold mt-1 text-yellow-400">
+                    {analytics.clutchRating}
+                  </div>
+                </div>
+
+                <div className="panel rounded-2xl p-4">
+                  <div className="text-xs text-gray-400">
+                    CURRENT RUN
+                  </div>
+
+                  <div className="text-lg font-bold mt-1">
+                    {analytics.currentRun}
+                  </div>
+                </div>
+
+                <div className="panel rounded-2xl p-4">
+                  <div className="text-xs text-gray-400">
+                    PACE
+                  </div>
+
+                  <div className="text-lg font-bold mt-1">
+                    {analytics.pace}
+                  </div>
+                </div>
+
+              </div>
 
               <div className="mt-6 flex items-center gap-3">
 
-                <div className="w-3 h-3 rounded-full bg-green-400 animate-pulse" />
+                <div className="w-3 h-3 rounded-full bg-green-400 animate-pulse"/>
 
                 <div className="text-sm text-gray-400 tracking-widest">
                   LIVE MODEL UPDATING
@@ -348,7 +413,7 @@ export default function GamePage() {
           <div className="lg:col-span-2">
 
             <MomentumChart
-              data={momentumData}
+                data={momentumData}
             />
           </div>
         </div>
@@ -356,10 +421,16 @@ export default function GamePage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
 
           <PlayByPlayFeed
-            events={events}
+              events={events}
           />
 
-          <WhatIfSimulator />
+          {
+            !isFinal && (
+              <WhatIfSimulator
+                game={game}
+              />
+            )
+          }
         </div>
       </div>
     </div>

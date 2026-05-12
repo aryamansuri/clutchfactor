@@ -11,4 +11,6 @@ export type Game = {
   time: string;
 
   probability: number;
+  period: number;
+  status: string;
 };

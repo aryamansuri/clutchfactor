@@ -16,7 +16,10 @@ type Props = {
 
 export default function GameCard({ game }: Props) {
   return (
-    <Link to={`/game/${game.id}`}>
+    <Link
+      to={`/game/${game.id}`}
+      state={{ game }}
+    >
       <div className="panel rounded-3xl p-6 hover:border-yellow-400/40
                 hover:scale-[1.02]
                 hover:-translate-y-1
