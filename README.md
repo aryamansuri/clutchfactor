@@ -145,7 +145,7 @@ React Frontend
 
 ```bash
 
-git clone https://github.com/yourusername/clutchfactor.git
+git clone https://github.com/aryamansuri/clutchfactor.git
 
 cd clutchfactor
 
