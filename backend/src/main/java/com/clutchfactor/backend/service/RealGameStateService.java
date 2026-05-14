@@ -34,7 +34,10 @@ public class RealGameStateService {
             List<GameDto> games =
                 nbaApiService.fetchLiveGames();
 
-            if (games != null) {
+            if (
+                games != null &&
+                !games.isEmpty()
+            ) {
                 cachedGames = games;
             }
 
@@ -43,7 +46,6 @@ public class RealGameStateService {
             System.out.println(
                 "Using cached NBA data."
             );
-
         }
 
         return cachedGames;

@@ -20,7 +20,7 @@ import WinProbabilityRing from "../components/games/WinProbabilityRing";
 
 import MomentumChart from "../components/charts/MomentumChart";
 
-import PlayByPlayFeed from "../components/games/PlayByPlayFeed";
+import InsightsPanel from "../components/games/InsightsPanel";
 
 import WhatIfSimulator from "../components/simulator/WhatIfSimulator";
 
@@ -38,10 +38,6 @@ import type {
   ProbabilitySnapshot
 } from "../types/ProbabilitySnapshot";
 
-import type {
-  GameEvent
-} from "../types/GameEvent";
-
 export default function GamePage() {
 
   const { id } = useParams();
@@ -57,68 +53,6 @@ export default function GamePage() {
 
   const [momentumData, setMomentumData] =
     useState<ProbabilitySnapshot[]>([]);
-
-  const [events, setEvents] =
-    useState<GameEvent[]>([
-      {
-        time: "12:00",
-        text: "Game started",
-      },
-    ]);
-
-    function generateEvent(
-      probability: number
-    ): string {
-
-      const positiveEvents = [
-        "Curry hits a deep three",
-        "Warriors on a scoring run",
-        "Fast break dunk",
-        "Huge defensive stop",
-        "Momentum shifting hard",
-      ];
-
-      const neutralEvents = [
-        "Timeout called",
-        "Possession reset",
-        "Mid-range jumper",
-        "Rebound secured",
-      ];
-
-      const negativeEvents = [
-        "Turnover committed",
-        "Missed transition opportunity",
-        "Bad foul called",
-        "Shot clock violation",
-      ];
-
-      if (probability > 70) {
-
-        return positiveEvents[
-          Math.floor(
-            Math.random() *
-            positiveEvents.length
-          )
-        ];
-      }
-
-      if (probability < 40) {
-
-        return negativeEvents[
-          Math.floor(
-            Math.random() *
-            negativeEvents.length
-          )
-        ];
-      }
-
-      return neutralEvents[
-        Math.floor(
-          Math.random() *
-          neutralEvents.length
-        )
-      ];
-    }
 
   useEffect(() => {
 
@@ -186,18 +120,6 @@ export default function GamePage() {
                 probability:
                   updatedGame.probability,
               },
-            ]);
-
-            setEvents((prev) => [
-              {
-                time: updatedGame.time,
-
-                text: generateEvent(
-                  updatedGame.probability
-                ),
-              },
-
-              ...prev.slice(0, 7),
             ]);
           }
         }
@@ -420,8 +342,9 @@ export default function GamePage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
 
-          <PlayByPlayFeed
-              events={events}
+          <InsightsPanel
+            game={game}
+            momentumData={momentumData}
           />
 
           {
