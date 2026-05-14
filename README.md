@@ -1,295 +1,276 @@
 # ClutchFactor
 
-Live NBA win probability analytics platform built with React, Spring Boot, WebSockets, PostgreSQL, and Docker.
+Live NBA analytics platform built with React, Spring Boot, WebSockets, PostgreSQL, and Docker.
 
-ClutchFactor simulates real-time NBA game momentum using live NBA data, a custom probability engine, and real-time event broadcasting to create an interactive analytics experience inspired by modern sports broadcasts.
+ClutchFactor delivers real-time NBA game tracking, live win probability modeling, momentum analytics, and interactive game simulations using live data from the BALLDONTLIE API.
+
+Designed to replicate the feel of a modern sports analytics dashboard with live updates, predictive modeling, and interactive game intelligence.
 
 ---
 
 ## Features
 
-### Real-Time NBA Dashboard
+## Live NBA Dashboard
 
-- Live NBA game tracking
+- Live NBA game tracking using BALLDONTLIE API
+- Auto-updating scores, game clock, and win probability
+- Real-time WebSocket broadcasting for active games
+- Live ticker for ongoing games
+- Responsive analytics dashboard UI
 
-- Auto-updating scores and probabilities
+## Win Probability Engine
 
-- Real-time ticker for active games
+- Custom probability engine based on:
+  - score differential
+  - game period
+  - game context
+- Real-time probability recalculation
+- Live momentum updates every refresh cycle
 
-- Smooth animated UI
+## Advanced Game Analytics
 
-### Win Probability Engine
+Each live game includes:
 
-- Dynamic win probability calculations
+- Win Probability Ring
+- Momentum Chart
+- Game Insights Panel with:
+  - projected final score
+  - clutch rating
+  - pace estimate
+  - current run
+  - largest lead
+  - scoring differential
 
-- Real-time momentum updates
+## Interactive Simulation
 
-- Probability simulation based on game state
+### What-If Simulator
 
-### Momentum Analytics
+Users can simulate hypothetical game scenarios:
 
-- Live momentum charts
+- score swing adjustments
+- probability impact visualization
+- live projected win probability changes
 
-- Historical probability tracking
+Example:
 
+- Current: CLE 61%
+- If DET scores next possession: CLE 48%
+- Impact: -13%
+
+## Reliability & Production Resilience
+
+- Cached game fallback when API rate limits occur
+- Prevents app failure during BALLDONTLIE outages
+- Preserves latest valid game state on API failure
+- Offseason / no-games demo mode for portfolio reviewers
+
+This ensures the app remains usable even when:
+- NBA games are inactive
+- external APIs are unavailable
+- API rate limits are hit
+
+## Infrastructure
+
+- Full-stack Docker support
 - PostgreSQL persistence layer
-
-### Interactive Game Experience
-
-- Animated probability ring
-
-- Play-by-play event feed
-
-- “What If” simulation panel
-
-- Team-specific branding and themes
-
-### Infrastructure
-
-- Full-stack Docker setup
-
+- Scheduled backend updates
 - WebSocket event broadcasting
-
-- PostgreSQL database integration
-
 - Environment-based configuration
 
 ---
 
 ## Tech Stack
 
-### Frontend
+## Frontend
 
 - React
-
 - TypeScript
-
 - Vite
-
 - TailwindCSS
-
 - Framer Motion
-
 - Recharts
+- React Router
 
-### Backend
+## Backend
 
 - Java 21
-
 - Spring Boot
-
+- Spring Web
 - Spring WebSocket
-
+- Spring Scheduling
 - Spring Data JPA
 
-- Spring Scheduling
-
-### Infrastructure
+## Database
 
 - PostgreSQL
 
-- Docker
+## Infrastructure
 
+- Docker
 - Docker Compose
 
-### APIs
+## External API
 
-- BallDontLie NBA API
+- BALLDONTLIE NBA API
 
 ---
 
-## Architecture
+## System Architecture
 
 ```text
-
-NBA API
-
-   ↓
-
+BALLDONTLIE API
+      ↓
 Spring Boot Backend
-
-   ↓
-
-Probability Simulation Engine
-
-   ↓
-
+      ↓
+Probability Engine + Analytics Layer
+      ↓
 PostgreSQL Persistence
-
-   ↓
-
+      ↓
 WebSocket Broadcaster
-
-   ↓
-
+      ↓
 React Frontend
-
 ```
 
 ---
 
 ## Screenshots
 
-### Home Dashboard
+## Home Dashboard
 
 ![Home Dashboard](./screenshots/Homepage.png)
 
-### Live Game View
+## Live Game Analytics
 
 ![Live Game](./screenshots/LiveGame.png)
+
 ---
 
 ## Local Setup
 
-### Clone Repository
+## Clone Repository
 
 ```bash
-
 git clone https://github.com/aryamansuri/clutchfactor.git
-
 cd clutchfactor
-
 ```
 
 ---
 
-### Backend Setup
+## Backend Setup
 
 ```bash
-
 cd backend
-
 ```
 
 Create `.env`
 
 ```env
-
 BALLDONTLIE_API_KEY=your_api_key
-
 DB_URL=jdbc:postgresql://localhost:5433/clutchfactor
-
 DB_USERNAME=postgres
-
 DB_PASSWORD=password
-
 ```
 
 Run backend:
 
 ```bash
-
 export $(grep -v '^#' .env | xargs)
-
 ./mvnw spring-boot:run
-
 ```
 
 ---
 
-### Frontend Setup
+## Frontend Setup
 
 ```bash
-
 cd frontend
-
 ```
 
 Create `.env`
 
 ```env
-
 VITE_API_URL=http://localhost:8080
-
 ```
 
 Install dependencies:
 
 ```bash
-
 npm install
-
 ```
 
 Run frontend:
 
 ```bash
-
 npm run dev
-
 ```
 
 ---
 
-### Docker Setup
+## Docker Setup
 
-Run the full stack:
+Run full stack:
 
 ```bash
-
 docker compose up --build
+```
 
+Stop containers:
+
+```bash
+docker compose down
 ```
 
 ---
 
 ## Environment Variables
 
-### Backend
+## Backend
 
 ```env
-
 BALLDONTLIE_API_KEY=
-
 DB_URL=
-
 DB_USERNAME=
-
 DB_PASSWORD=
-
 ```
 
-### Frontend
+## Frontend
 
 ```env
-
 VITE_API_URL=
-
 ```
 
 ---
 
 ## Future Improvements
 
-- Machine learning-based probability engine
-
-- Historical game replay
-
-- Advanced player analytics
-
-- Redis caching layer
-
-- Mobile optimization
-
-- Push notifications for clutch moments
-
-- User authentication and watchlists
+- ML-based win probability model
+- Player-level analytics
+- Historical game replay mode
+- Redis caching
+- Mobile-first UI improvements
+- User watchlists
+- Notifications for clutch moments
 
 ---
 
 ## Why I Built This
 
-I wanted to build a project that combined:
+I wanted to build a project combining:
 
 - real-time systems
-
+- predictive analytics
 - backend architecture
-
-- analytics visualization
-
+- event-driven systems
 - interactive frontend engineering
 
-ClutchFactor was designed to simulate the feel of a live sports analytics platform while showcasing concepts like WebSockets, event-driven architecture, Docker, and full-stack deployment.
+ClutchFactor was built to simulate a production-grade live sports analytics platform while showcasing:
+
+- WebSockets
+- scheduled backend jobs
+- API integration
+- caching strategies
+- Dockerized deployment
+- full-stack architecture
 
 ---
 
