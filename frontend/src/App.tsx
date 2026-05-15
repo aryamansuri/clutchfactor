@@ -1,14 +1,26 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage.tsx";
 import GamePage from "./pages/GamePage";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/game/:id" element={<GamePage />} />
-      </Routes>
-    </BrowserRouter>
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path="/"
+            element={<HomePage />}
+          />
+
+          <Route
+            path="/game/:id"
+            element={<GamePage />}
+          />
+        </Routes>
+      </BrowserRouter>
+
+      <SpeedInsights />
+    </>
   );
 }
